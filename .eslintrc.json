@@ -16,6 +16,27 @@
                 "tabWidth": 2,
                 "ignoreComments": false
             }
-        ]
+        ],
+        "import/prefer-default-export": "off",
+        "import/no-named-as-default": "off",
+        "import/no-named-as-default-member": "off",
+        "linebreak-style": [
+            "error",
+            "windows"
+        ],
+        "no-trailing-spaces": "error",
+        "no-tabs": [
+            "error",
+            {
+                "allowIndentationTabs": true
+            }
+        ],
+        "indent": [
+            [
+                "error",
+                "tab"
+            ],
+            4
+        ],
     }
 }
