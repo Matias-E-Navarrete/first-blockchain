@@ -23,6 +23,6 @@ describe('Test suite Blockchain', () => {
         const [, lastBlock] = blockchain.blocks
 
         expect(lastBlock.data).toEqual(data)
-        expect(blockchain.data).toEqual(2)
+        expect(blockchain.blocks.length).toEqual(2)
     })
 });
