@@ -1,36 +1,63 @@
-# This is a basic workflow to help you get started with Actions
 
-name: CI
 
-# Controls when the workflow will run
-on:
-  # Triggers the workflow on push or pull request events but only for the master branch
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+Code coverage is a software-testing metric that determines how many lines of code have successfully validated under a test suite, and is usually measured with specialized tools like Codecov. These tools facilitate reporting and visualizing coverage reports and help developers understand how they can improve their test suite.
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+This tutorial explores running tests and generating code coverage in a Node application, as well as how to automate report generation and upload them from GitHub to Codecov using GitHub Actions.
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+Running JavaScript Tests and Coverage Locally with Jest
+You can run tests and code coverage locally on your JavaScript application with Jest. Conveniently, Jest offers but doesn’t require much configuration for most JavaScript projects.
+
+You can use the sample application by cloning it from GitHub:
+
+git clone https://github.com/AdeyinkaAdegbenro/codecov_jest.git
+Once you’ve cloned the sample application, Jest has already been added to the package.json file, so you’re ready to install it:
+
+npm install
+In the application folder, you should see two files: hello_world.js and hello_world.test.js. The hello_world.js file contains the function hello_world, which accepts a number and checks whether it is even or odd before returning a corresponding output. The hello_world.test.js is the Jest test file for hello_world.js.
+
+Jest has already been added to the npm test command. This means you can run both the test and coverage using Jest directly from the command line by running:
+
+npm run test
+Jest will generate the coverage report and put it in a folder called coverage. Commit your code changes and push the sample application to a new repository on GitHub.
+
+Setting Up GitHub Actions
+Now that you can run tests and code coverage locally on the sample application, it’s time to take it up a notch by incorporating code coverage reporting into your continuous integration flow with GitHub Actions.
+
+GitHub Actions enables you to add continuous integration to your GitHub repository using workflows you can define in a .yml file. These are stored in a directory called .github/workflows.
+
+To set up GitHub Actions, you need to configure a workflow file. In the sample application, create a .github/workflows/ directory. Then, in the.github/workflows/ directory, create a new file coverage.yml. Note that the YAML file can be renamed to whatever you want.
+
+mkdir .github/workflows && cd .github/workflows
+
+touch coverage.yml
+In the coverage.yml file, add the following lines:
+
+name: Running Code Coverage
+
+on: [push, pull_request]
+
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
+
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x, 14.x, 16.x]
+
     steps:
-      - uses: actions/checkout@master
-      - name: Generate coverage report
-        run: |
-         npm run test:coverage
-      - uses: codecov/codecov-action@v2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
-          files: ./coverage1.xml # optional
-          flags: unittests # optional
-          name: codecov-umbrella # optional
-          fail_ci_if_error: true # optional (default = false)
-          verbose: true # optional (default = false)
+    - name: Checkout repository
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 2 
+
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run the tests
+      run: npm test -- --coverage
