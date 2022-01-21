@@ -43,6 +43,8 @@
   "jest": {
     "silent": true,
     "verbose": true,
-    "testEnvironmment": "node"
+    "testEnvironmment": "node",
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
   }
 }
