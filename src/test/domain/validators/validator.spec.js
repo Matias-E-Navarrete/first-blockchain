@@ -1,6 +1,6 @@
 import Block from '../../../domain/entity/block';
 import Blockchain from '../../../domain/entity/blockchain';
-import {validateBlockchain} from '../../../domain/validators/validator'
+import validator from '../../../domain/validators/validator'
 
 describe('Test Suite: validateBlockchain', () => {
     let blockchain;
@@ -13,14 +13,14 @@ describe('Test Suite: validateBlockchain', () => {
         blockchain.addBlock('Bl0cK1');
         blockchain.addBlock('Bl0cK2');
 
-        expect(validateBlockchain(blockchain)).toBe(true)
+        expect(validator(blockchain.blocks)).toBe(true)
     })
 
     it('Invalid blockchain with a corrupt genesis block', () => {
         blockchain.blocks[0].data = 'it has been Hacked';
         const errorMessage = 'Genesis Block is corrupt';
         expect(() => {
-            validateBlockchain(blockchain)
+            validator(blockchain.blocks)
         }).toThrowError(errorMessage)
     });
 
@@ -30,7 +30,7 @@ describe('Test Suite: validateBlockchain', () => {
         blockchain.blocks[1].previousHash = '_NiC4r4Gu4_';
 
         expect(() => {
-            validateBlockchain(blockchain);
+            validator(blockchain.blocks);
         }).toThrowError(errorMessage)
 
     });
@@ -41,7 +41,7 @@ describe('Test Suite: validateBlockchain', () => {
         const errorMessage = 'Hash is not valid';
 
         expect(()=>{
-            validateBlockchain(blockchain)
+            validator(blockchain.blocks)
         }).toThrowError(errorMessage)
     })
 
