@@ -1,7 +1,7 @@
 import Block from '../entity/block'
 
-export const validateBlockchain = blockchain => {
-    const [genesisBlock, ...blocks] = blockchain.blocks;
+export default (blockchain) => {
+    const [genesisBlock, ...blocks] = blockchain;
     const genesis = Block.genesis;
 
     if (JSON.stringify(genesisBlock) !== JSON.stringify(genesis))
@@ -9,7 +9,7 @@ export const validateBlockchain = blockchain => {
 
     for (let i = 0; i < blocks.length; i++) {
         const { previousHash, hash, timestamp, data } = blocks[i];
-        const previousBlock = blockchain.blocks[i]
+        const previousBlock = blockchain[i]
 
         if (previousHash !== previousBlock.hash)
             throw new Error('Previous hash is corrupt');

@@ -1,5 +1,4 @@
 import Block from '../../../domain/entity/block';
-import { SHA256 } from 'crypto-js';
 
 describe('Class Block', () => {
 
