@@ -1,12 +1,14 @@
 import { SHA256 } from 'crypto-js';
+import { DIFFICULTY } from '../constants/blocks.constant';
 
 export default class Block {
-  
-  constructor(timestamp, previousHash, hash, data) {
+
+  constructor(timestamp, previousHash, hash, data, nonce) {
     this.timestamp = timestamp;
     this.previousHash = previousHash;
     this.hash = hash;
     this.data = data;
+    this.nonce = nonce;
   }
 
   static get genesis() {
@@ -18,15 +20,22 @@ export default class Block {
   }
 
   static mine(previusBlock, data) {
-    const timestamp = Date.now();
+    let timestamp;
+    let nonce = 0;
+    let hash;
     const { hash: previousHash } = previusBlock;
-    const hash = Block.generateHash(timestamp, previousHash, data);
 
-    return new this(timestamp, previousHash, hash, data);
+    do {
+      timestamp = Date.now();
+      nonce++;
+      hash = Block.generateHash(timestamp, previousHash, data, nonce);
+    } while (hash.substring(0, DIFFICULTY) !== '0'.repeat(DIFFICULTY));
+
+    return new this(timestamp, previousHash, hash, data, nonce);
   }
 
-  static generateHash(timestamp, previuosHash, data) {
-    return SHA256(`${timestamp}${previuosHash}${data}`).toString();
+  static generateHash(timestamp, previuosHash, data, nonce) {
+    return SHA256(`${timestamp}${previuosHash}${data}${nonce}`).toString();
   }
 
   toString() {
@@ -40,6 +49,7 @@ export default class Block {
         |previousHash: ${previousHash}  
         |hash: ${hash}                  
         |data: ${JSON.stringify(data)}                  
+        |nonce: ${nonce}                  
          ===============================================
         `;
   }
