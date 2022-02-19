@@ -1,4 +1,3 @@
-import Block from '../../../domain/entity/block';
 import Blockchain from '../../../domain/entity/blockchain';
 import validator from '../../../domain/validators/validator'
 
