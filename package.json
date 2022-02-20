@@ -11,7 +11,8 @@
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watchAll",
     "lint": "eslint ./src/app.js",
-    "lint:fix": "eslint ./src --fix"
+    "lint:fix": "eslint ./src --fix",
+    "miner": "babel-node src/api/miner.js"
   },
   "repository": {
     "type": "git",
@@ -33,12 +34,14 @@
     "add": "^2.0.6",
     "body-parser": "^1.19.1",
     "crypto-js": "^4.1.1",
+    "elliptic": "^6.5.4",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.25.4",
     "eslit": "^6.0.0",
     "express": "^4.17.2",
     "jest": "^27.4.7",
     "nodemon": "^2.0.15",
+    "uuid": "^8.3.2",
     "ws": "^8.4.2"
   },
   "devDependencies": {
